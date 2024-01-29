@@ -1,0 +1,265 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Trading Bot - Image and Table Display</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy60Sb1b20H/Cv3EPhYweD89h0BBfdjR2j"
+    crossorigin="anonymous">
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding: 20px;
+      font-family: 'Arial', sans-serif;
+    }
+
+    #content-container {
+      max-width: 800px;
+      margin: auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      border: 1px solid #dee2e6;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #007bff;
+      color: #ffffff;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #3498db;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .navbar {
+      background-color: #6c757d; /* Gray color for the navbar */
+      padding: 10px;
+      border-radius: 0 0 10px 10px;
+      margin-bottom: 20px;
+    }
+
+    .navbar-brand {
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center; /* Center the text */
+      width: 100%; /* Make the brand take the full width */
+    }
+
+    .navbar-brand:hover {
+      color: #ffffff;
+    }
+
+    .navbar-collapse {
+      justify-content: center; /* Center the links */
+    }
+
+    .navbar-nav .nav-item {
+      margin-right: 15px;
+    }
+
+    .navbar-nav .nav-link {
+      color: #ffffff;
+      font-size: 18px;
+    }
+
+    .navbar-nav .nav-link:hover {
+      color: #ffffff;
+    }
+
+    /* Additional styles for form-group */
+    .form-group {
+      margin-bottom: 20px;
+    }
+  </style>
+  <script>
+    // Define the base URL for static files in Django
+    const baseStaticUrl = "{% static '' %}";
+  </script>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">AI TRADING BOT</a>
+    </div>
+  </nav>
+
+  <div id="content-container">
+    <div class="form-group">
+      <label for="itemSelector">Select an item:</label>
+      <select class="form-control" id="itemSelector" onchange="updateDisplay()">
+        <option value="BTC">BTC</option>
+        <option value="USD">USD</option>
+        <option value="MNQ">MNQ</option>
+        <option value="AAPL">AAPL</option>
+      </select>
+    </div>
+
+    <div id="imageAndTableContainer">
+      <!-- Placeholder for image and table -->
+    </div>
+
+    <div id="loading" class="loader" style="display: none;"></div>
+  </div>
+
+  <!-- Bootstrap JS and Popper.js -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-rO2sucQlgg7MEugM0WC9EmUfQvjI/K7ZUKt1Ite3ODGd5FV2EaZp6fu9O2t1znu" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+Wy60Sb1b20H/Cv3EPhYweD89h0BBfdjR2j"
+    crossorigin="anonymous"></script>
+
+  <script>
+    function updateDisplay() {
+      const itemSelector = document.getElementById('itemSelector');
+      const selectedItem = itemSelector.value;
+
+      const imageAndTableContainer = document.getElementById('imageAndTableContainer');
+      const loadingContainer = document.getElementById('loading');
+
+      // Display loading spinner
+      loadingContainer.style.display = 'block';
+      imageAndTableContainer.innerHTML = ''; // Clear previous content
+
+      setTimeout(() => {
+        // Hide loading spinner after 5 seconds
+        loadingContainer.style.display = 'none';
+
+        // Define images and table data (replace with your actual data)
+        const images = {
+          'BTC': `${baseStaticUrl}BTC.png`,
+          'USD': `${baseStaticUrl}USD.png`,
+          'MNQ': `${baseStaticUrl}MNQ.png`,
+          'AAPL': `${baseStaticUrl}AAPL.png`,
+        };
+
+        const tablesData = {
+          'BTC': [
+            ['2024-01-31', 47.303375],
+            ['2024-02-01', 42.058422],
+            ['2024-02-02', 37.431889],
+            ['2024-02-03', 33.580307],
+            ['2024-02-04', 30.453129],
+          ],
+          'USD': [
+            ['2024-01-31', 66.330002],
+            ['2024-02-01', 68.730003],
+            ['2024-02-02', 68.629997],
+            ['2024-02-03', 65.320000],
+            ['2024-02-04', 66.900002],
+          ],
+          'MNQ': [
+            ['2024-01-31', 17458.50],
+            ['2024-02-01', 17531.25],
+            ['2024-02-02', 17621.00],
+            ['2024-02-03', 17634.50],
+            ['2024-02-04', 17527.00],
+          ],
+          'AAPL': [
+            ['2024-01-31', 195.179993],
+            ['2024-02-01', 194.500000],
+            ['2024-02-02', 194.169998],
+            ['2024-02-03', 192.419998],
+            ['2024-02-04', 191.669998],
+          ],
+        };
+
+        // Create image element
+        const image = document.createElement('img');
+        image.src = images[selectedItem];
+        image.alt = selectedItem + ' Image';
+        imageAndTableContainer.appendChild(image);
+
+        // Create table element
+        const table = document.createElement('table');
+
+        // Create table header row
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        const headers = ['Date', 'Future Close'];
+        headers.forEach(headerText => {
+          const th = document.createElement('th');
+          th.textContent = headerText;
+          headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // Create table body rows
+        const tbody = document.createElement('tbody');
+        tablesData[selectedItem].forEach(rowData => {
+          const tr = document.createElement('tr');
+          rowData.forEach(cellData => {
+            const td = document.createElement('td');
+            td.textContent = cellData;
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+
+        // Append table to the container
+        imageAndTableContainer.appendChild(table);
+      }, 5000); // 5 seconds
+    }
+
+    // Initial call to populate the page with default selection
+    updateDisplay();
+  </script>
+
+</body>
+
+</html>
